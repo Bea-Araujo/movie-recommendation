@@ -1,4 +1,5 @@
 import express from 'express';
+import { follow } from './src/Controller/FollowsController.js';
 import { post } from './src/Controller/PostController.js';
 import { user } from './src/Controller/UserController.js';
 
@@ -12,3 +13,4 @@ app.listen(PORT, () => {
 
 user(app);
 post(app);
+follow(app);
