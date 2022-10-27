@@ -1,16 +1,9 @@
-import sqlite3 from 'sqlite3';
+import { connectToDataBase } from "./DbDAO.js";
 
-const connectToDataBase = () => new sqlite3.Database('./src/infra/database.db', (err) => {
-    if (err) {
-        console.error(err.message);
-    }
-    console.log('Connected to the database.');
-});
-
-const createTable = (table) => {
+const createUsersTable = () => {
     const db = connectToDataBase();
-    const command = `CREATE TABLE IF NOT EXISTS ${table} (
-        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    const command = `CREATE TABLE IF NOT EXISTS USERS (
+        USERID INTEGER PRIMARY KEY AUTOINCREMENT,
         USERNAME VARCHAR(50), 
         PASSWORD VARCHAR(50)
         );
@@ -75,4 +68,4 @@ const deleteUserById = (id) => {
     }).close()
 }
 
-export { createTable, getAllUsers, getUserById, insertIntoUsers, editUserById, deleteUserById }
+export { createUsersTable, getAllUsers, getUserById, insertIntoUsers, editUserById, deleteUserById }

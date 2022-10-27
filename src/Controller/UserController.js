@@ -1,11 +1,11 @@
-import { createTable, deleteUserById, editUserById, getAllUsers, getUserById, insertIntoUsers } from "../DAO/UserDAO.js"
+import { createUsersTable, deleteUserById, editUserById, getAllUsers, getUserById, insertIntoUsers } from "../DAO/UserDAO.js"
 import { User } from "../Model/UserModel.js"
 
 function user(app) {
 
-    createTable('USERS')
+    createUsersTable()
 
-    app.get('/allUsers', async (req, res) => {
+    app.get('/user/all', async (req, res) => {
         const rows = await getAllUsers();
         res.send(rows)
     })
@@ -16,27 +16,27 @@ function user(app) {
         row ? res.send(row) : res.sendStatus(404)
     })
 
-    app.post('/newUser', (req, res) => {
+    app.post('/user/new', (req, res) => {
         const { username, password } = req.body;
         const newUser = new User(username, password);
         insertIntoUsers(newUser)
         res.sendStatus(200)
     })
 
-    app.put('/editUser/:id', async (req, res) => {
+    app.put('/user/edit/:id', async (req, res) => {
         const id = req.params.id
         const { username, password } = req.body;
-        const [{ USERNAME: OLD_USERNAME, PASSWORD: OLD_PASSWORD }] = await getUserById(id);
+        const [{ USERNAME, PASSWORD }] = await getUserById(id);
 
         const updatedUser = new User(
-            username || OLD_USERNAME,
-            password || OLD_PASSWORD
+            username || USERNAME,
+            password || PASSWORD
         );
         editUserById(id, updatedUser)
         res.sendStatus(200)
     })
 
-    app.delete('/deleteUser/:id', (req, res) => {
+    app.delete('/user/delete/:id', (req, res) => {
         const id = req.params.id
         deleteUserById(id)
         res.sendStatus(200)
