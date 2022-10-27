@@ -30,7 +30,7 @@ const getAllUsers = () => {
 
 const getUserById = (id) => {
     const db = connectToDataBase();
-    const selectCommand = `SELECT * FROM USERS WHERE ID=?;`
+    const selectCommand = `SELECT * FROM USERS WHERE USERID=?;`
 
     return new Promise((resolve, reject) => {
         db.all(selectCommand, [id], (error, rows) => {
@@ -52,7 +52,7 @@ const insertIntoUsers = ({ username, password }) => {
 
 const editUserById = (id, { username, password }) => {
     const db = connectToDataBase();
-    const updateCommand = `UPDATE USERS SET USERNAME = ?, PASSWORD = ? WHERE ID = ?;`
+    const updateCommand = `UPDATE USERS SET USERNAME = ?, PASSWORD = ? WHERE USERID = ?;`
 
     db.run(updateCommand, [username, password, id], (error) => {
         if (error) console.log(error)
@@ -61,7 +61,7 @@ const editUserById = (id, { username, password }) => {
 
 const deleteUserById = (id) => {
     const db = connectToDataBase();
-    const deleteCommand = `DELETE FROM USERS WHERE ID = ?;`
+    const deleteCommand = `DELETE FROM USERS WHERE USERID = ?;`
 
     db.run(deleteCommand, [id], (error) => {
         if (error) console.log(error)

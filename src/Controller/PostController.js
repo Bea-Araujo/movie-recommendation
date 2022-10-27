@@ -1,4 +1,4 @@
-import { createPostsTable, deletePostById, getAllPosts, getPostById, insertIntoPosts } from "../DAO/PostsDAO.js";
+import { createPostsTable, deletePostById, editPostById, getAllPosts, getPostById, insertIntoPosts } from "../DAO/PostsDAO.js";
 import { Post } from "../Model/PostModel.js";
 
 function post(app) {
@@ -20,7 +20,7 @@ function post(app) {
         const { title } = req.body;
         // have to look for userid
         const userid = 0;
-        const status = 1;
+        const status = 'OPEN';
         const followers = 0;
         const likes = 0;
         const dislikes = 0;
@@ -32,16 +32,19 @@ function post(app) {
     app.put('/post/edit/:id', async (req, res) => {
         const id = req.params.id
         const { status, title, followers, likes, dislikes } = req.body;
-        const [{ STATUS, TITLE, FOLLOWERS, LIKES, DISLIKES }] = await getPostById(id);
+
+        const [{ USERID, STATUS, TITLE, FOLLOWERS, LIKES, DISLIKES }] = await getPostById(id);
 
         const updatedPost = new Post(
+            USERID,
             status || STATUS,
             title || TITLE,
             followers || FOLLOWERS,
             likes || LIKES,
             dislikes || DISLIKES
         );
-        edit(id, updatedPost)
+        console.log(updatedPost)
+        editPostById(id, updatedPost)
         res.sendStatus(200)
     })
 

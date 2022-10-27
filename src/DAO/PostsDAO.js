@@ -5,7 +5,7 @@ const createPostsTable = (table) => {
     const command = `CREATE TABLE IF NOT EXISTS POSTS (
         POSTID INTEGER PRIMARY KEY AUTOINCREMENT,
         USERID INTEGER,
-        STATUS BOOLEAN,
+        STATUS VARCHAR(10),
         TITLE VARCHAR(225),
         FOLLOWERS INTEGER,
         LIKES INTEGER,
@@ -34,7 +34,7 @@ const getAllPosts = () => {
 
 const getPostById = (id) => {
     const db = connectToDataBase();
-    const selectCommand = `SELECT * FROM POSTS WHERE ID=?;`
+    const selectCommand = `SELECT * FROM POSTS WHERE POSTID=?;`
 
     return new Promise((resolve, reject) => {
         db.all(selectCommand, [id], (error, rows) => {
@@ -55,8 +55,9 @@ const insertIntoPosts = ({ userid, title }) => {
 }
 
 const editPostById = (id, { status, followers, likes, dislikes }) => {
+    /// não deve poder mudar o título
     const db = connectToDataBase();
-    const updateCommand = `UPDATE POSTS SET STATUS = ?, FOLLOWERS = ?, LIKES = ?, DISLIKES = ? WHERE ID = ?;`
+    const updateCommand = `UPDATE POSTS SET STATUS = ?, FOLLOWERS = ?, LIKES = ?, DISLIKES = ? WHERE POSTID = ?;`
 
     db.run(updateCommand, [status, followers, likes, dislikes, id], (error) => {
         if (error) console.log(error)
@@ -65,7 +66,7 @@ const editPostById = (id, { status, followers, likes, dislikes }) => {
 
 const deletePostById = (id) => {
     const db = connectToDataBase();
-    const deleteCommand = `DELETE FROM POSTS WHERE ID = ?;`
+    const deleteCommand = `DELETE FROM POSTS WHERE POSTID = ?;`
 
     db.run(deleteCommand, [id], (error) => {
         if (error) console.log(error)
