@@ -39,9 +39,9 @@ function post(app) {
             USERID,
             status || STATUS,
             title || TITLE,
-            followers || FOLLOWERS,
-            likes || LIKES,
-            dislikes || DISLIKES
+            followers ? followers : FOLLOWERS,
+            likes ? likes : LIKES,
+            dislikes ? dislikes : DISLIKES
         );
         console.log(updatedPost)
         editPostById(id, updatedPost)
