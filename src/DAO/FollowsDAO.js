@@ -6,7 +6,7 @@ const createFollowsTable = (table) => {
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         POSTID INTEGER,
         USERID INTEGER,
-        LIKE INTEGER
+        LIKE VARCHAR(1)
         );
     `
     db.run(command,
@@ -31,7 +31,7 @@ const getAllFollows = () => {
 
 const getFollowsById = (id) => {
     const db = connectToDataBase();
-    const selectCommand = `SELECT * FROM POSTS WHERE ID=?;`
+    const selectCommand = `SELECT * FROM FOLLOWS WHERE ID=?;`
 
     return new Promise((resolve, reject) => {
         db.all(selectCommand, [id], (error, rows) => {
@@ -52,7 +52,6 @@ const insertIntoFollows = ({ userid, postid, like }) => {
 }
 
 const editFollowsById = (id, { like }) => {
-    /// não deve poder mudar o título
     const db = connectToDataBase();
     const updateCommand = `UPDATE FOLLOWS SET LIKE = ? WHERE ID = ?;`
 

@@ -1,5 +1,5 @@
 
-import { createFollowsTable, deleteFollowsById, getAllFollows, getFollowsById, insertIntoFollows } from "../DAO/FollowsDAO.js";
+import { createFollowsTable, deleteFollowsById, editFollowsById, getAllFollows, getFollowsById, insertIntoFollows } from "../DAO/FollowsDAO.js";
 import { Follow } from "../Model/FollowsModel.js";
 import { Post } from "../Model/PostModel.js";
 
@@ -30,15 +30,15 @@ function follow(app) {
         const id = req.params.id
         const { userid, postid, like } = req.body;
 
-        const [{ USERID, POSTID, LIKE }] = await getPostById(id);
+        const [{ USERID, POSTID, LIKE }] = await getFollowsById(id);
 
-        const updatedFollow = new Post(
+        const updatedFollow = new Follow(
             userid || USERID,
             postid || POSTID,
             like || LIKE
         );
 
-        editPostById(id, updatedFollow)
+        editFollowsById(id, updatedFollow)
         res.sendStatus(200)
     })
 
