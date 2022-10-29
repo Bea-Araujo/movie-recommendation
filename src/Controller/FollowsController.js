@@ -14,7 +14,7 @@ function follow(app) {
     app.get('/follow/:userid/:postid', async (req, res) => {
         const userid = req.params.userid
         const postid = req.params.postid
-        const [row] = await getFollowsByIds(userid, postid);
+        const row = await getFollowsByIds(userid, postid);
         row ? res.send(row) : res.sendStatus(404)
     })
 
