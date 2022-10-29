@@ -1,7 +1,6 @@
 
-import { createFollowsTable, deleteFollowsById, editFollowsById, getAllFollows, getFollowsById, insertIntoFollows } from "../DAO/FollowsDAO.js";
+import { createFollowsTable, deleteFollowsByIds, editFollowsByIds, getAllFollows, getFollowsByIds, insertIntoFollows } from "../DAO/FollowsDAO.js";
 import { Follow } from "../Model/FollowsModel.js";
-import { Post } from "../Model/PostModel.js";
 
 function follow(app) {
 
@@ -12,9 +11,10 @@ function follow(app) {
         rows.length > 0 ? res.send(rows) : res.sendStatus(404)
     })
 
-    app.get('/follow/:id', async (req, res) => {
-        const id = req.params.id
-        const [row] = await getFollowsById(id);
+    app.get('/follow/:userid/:postid', async (req, res) => {
+        const userid = req.params.userid
+        const postid = req.params.postid
+        const [row] = await getFollowsByIds(userid, postid);
         row ? res.send(row) : res.sendStatus(404)
     })
 
@@ -28,17 +28,18 @@ function follow(app) {
 
     app.put('/follow/edit/:id', async (req, res) => {
         const id = req.params.id
-        const { userid, postid, like } = req.body;
+        const { userid, postid, like, dislike } = req.body;
 
-        const [{ USERID, POSTID, LIKE }] = await getFollowsById(id);
+        const [{ USERID, POSTID, LIKE, DISLIKE }] = await getFollowsById(id);
 
         const updatedFollow = new Follow(
             userid || USERID,
             postid || POSTID,
-            like || LIKE
+            like ? like : LIKE,
+            dislike ? dislike : DISLIKE,
         );
 
-        editFollowsById(id, updatedFollow)
+        editFollowsByIds(updatedFollow)
         res.sendStatus(200)
     })
 

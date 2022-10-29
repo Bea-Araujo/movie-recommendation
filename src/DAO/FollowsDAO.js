@@ -30,12 +30,12 @@ const getAllFollows = () => {
 
 }
 
-const getFollowsById = (id) => {
+const getFollowsByIds = (userid, postid) => {
     const db = connectToDataBase();
-    const selectCommand = `SELECT * FROM FOLLOWS WHERE ID=?;`
+    const selectCommand = `SELECT * FROM FOLLOWS WHERE USERID=? AND POSTID=?;`
 
     return new Promise((resolve, reject) => {
-        db.all(selectCommand, [id], (error, rows) => {
+        db.all(selectCommand, [userid, postid], (error, rows) => {
             resolve(rows)
             reject(error)
         }).close()
@@ -43,31 +43,31 @@ const getFollowsById = (id) => {
 
 }
 
-const insertIntoFollows = ({ userid, postid, like }) => {
+const insertIntoFollows = ({ userid, postid, like, dislike }) => {
     const db = connectToDataBase();
-    const insertCommand = `INSERT INTO FOLLOWS(USERID, POSTID, LIKE) VALUES(?, ?, ?);`
+    const insertCommand = `INSERT INTO FOLLOWS(USERID, POSTID, LIKE, DISLIKE) VALUES(?, ?, ?, ?);`
 
-    db.run(insertCommand, [userid, postid, like], (error) => {
+    db.run(insertCommand, [userid, postid, like, dislike], (error) => {
         if (error) console.log(error)
     }).close()
 }
 
-const editFollowsById = (id, { like }) => {
+const editFollowsByIds = ({ like, dislike, userid, postid }) => {
     const db = connectToDataBase();
-    const updateCommand = `UPDATE FOLLOWS SET LIKE = ? WHERE ID = ?;`
+    const updateCommand = `UPDATE FOLLOWS SET LIKE = ?, DISLIKE = ? WHERE USERID=? AND POSTID=?;`
 
-    db.run(updateCommand, [like, id], (error) => {
+    db.run(updateCommand, [like, dislike, userid, postid], (error) => {
         if (error) console.log(error)
     }).close()
 }
 
-const deleteFollowsById = (id) => {
+const deleteFollowsByIds = (userid, postid) => {
     const db = connectToDataBase();
-    const deleteCommand = `DELETE FROM FOLLOWS WHERE ID = ?;`
+    const deleteCommand = `DELETE FROM FOLLOWS WHERE USERID=? AND POSTID=?;`
 
-    db.run(deleteCommand, [id], (error) => {
+    db.run(deleteCommand, [userid, postid], (error) => {
         if (error) console.log(error)
     }).close()
 }
 
-export { createFollowsTable, getAllFollows, getFollowsById, insertIntoFollows, editFollowsById, deleteFollowsById }
+export { createFollowsTable, getAllFollows, getFollowsByIds, insertIntoFollows, editFollowsByIds, deleteFollowsByIds }
