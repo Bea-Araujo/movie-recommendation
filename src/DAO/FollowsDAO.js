@@ -6,7 +6,8 @@ const createFollowsTable = (table) => {
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         POSTID INTEGER,
         USERID INTEGER,
-        LIKE VARCHAR(1)
+        LIKE VARCHAR(1),
+        DISLIKE VARCHAR(1)
         );
     `
     db.run(command,
