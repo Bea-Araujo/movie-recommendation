@@ -17,9 +17,8 @@ function post(app) {
     })
 
     app.post('/post/new', (req, res) => {
-        const { title } = req.body;
+        const { userid, title } = req.body;
         // have to look for userid
-        const userid = 0;
         const status = 'OPEN';
         const followers = 0;
         const likes = 0;
