@@ -3,7 +3,7 @@ export class Follow {
         this.userid = userid;
         this.postid = postid;
         this.like = like;
-        THIS.dislike = dislike;
+        this.dislike = dislike;
     }
 
 }

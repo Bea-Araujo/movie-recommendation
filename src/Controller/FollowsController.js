@@ -19,18 +19,20 @@ function follow(app) {
     })
 
     app.post('/follow/new', (req, res) => {
-        const { userid, postid, like } = req.body;
+        const { userid, postid, like, dislike } = req.body;
 
-        const newFollow = new Follow(userid, postid, like)
+        const newFollow = new Follow(userid, postid, like, dislike)
+
         insertIntoFollows(newFollow)
         res.sendStatus(200)
     })
 
-    app.put('/follow/edit/:id', async (req, res) => {
-        const id = req.params.id
+    app.put('/follow/edit/:userid/:postid', async (req, res) => {
+        const useridParam = req.params.userid
+        const postidParam = req.params.postid
         const { userid, postid, like, dislike } = req.body;
 
-        const [{ USERID, POSTID, LIKE, DISLIKE }] = await getFollowsById(id);
+        const [{ USERID, POSTID, LIKE, DISLIKE }] = await getFollowsByIds(useridParam, postidParam);
 
         const updatedFollow = new Follow(
             userid || USERID,
@@ -43,9 +45,10 @@ function follow(app) {
         res.sendStatus(200)
     })
 
-    app.delete('/follow/delete/:id', (req, res) => {
-        const id = req.params.id
-        deleteFollowsById(id)
+    app.delete('/follow/delete/:userid/:postid', (req, res) => {
+        const useridParam = req.params.userid
+        const postidParam = req.params.postid
+        deleteFollowsByIds(useridParam, postidParam)
         res.sendStatus(200)
     })
 }
