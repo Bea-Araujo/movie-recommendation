@@ -32,17 +32,22 @@ function follow(app) {
         const postidParam = req.params.postid
         const { userid, postid, like, dislike } = req.body;
 
-        const [{ USERID, POSTID, LIKE, DISLIKE }] = await getFollowsByIds(useridParam, postidParam);
+        try {
+            const [{ USERID, POSTID, LIKE, DISLIKE }] = await getFollowsByIds(useridParam, postidParam);
+            const updatedFollow = new Follow(
+                userid || USERID,
+                postid || POSTID,
+                like ? like : LIKE,
+                dislike ? dislike : DISLIKE,
+            );
 
-        const updatedFollow = new Follow(
-            userid || USERID,
-            postid || POSTID,
-            like ? like : LIKE,
-            dislike ? dislike : DISLIKE,
-        );
+            editFollowsByIds(updatedFollow)
+            res.sendStatus(200)
+        } catch (e) {
+            console.log('Unable to update')
+            res.send('Unable to update')
+        }
 
-        editFollowsByIds(updatedFollow)
-        res.sendStatus(200)
     })
 
     app.delete('/follow/delete/:userid/:postid', (req, res) => {
