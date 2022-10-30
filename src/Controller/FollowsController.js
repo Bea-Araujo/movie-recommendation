@@ -8,7 +8,7 @@ function follow(app) {
 
     app.get('/follow/all', async (req, res) => {
         const rows = await getAllFollows();
-        rows.length > 0 ? res.send(rows) : res.sendStatus(404)
+        res.send(rows)
     })
 
     app.get('/follow/:userid/:postid', async (req, res) => {

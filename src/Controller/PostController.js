@@ -7,7 +7,7 @@ function post(app) {
 
     app.get('/post/all', async (req, res) => {
         const rows = await getAllPosts();
-        rows.length > 0 ? res.send(rows) : res.sendStatus(404)
+        res.send(rows)
     })
 
     app.get('/post/:id', async (req, res) => {
